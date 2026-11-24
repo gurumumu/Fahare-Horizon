@@ -1,11 +1,15 @@
-# Fahare Horizon 0.3.1 — experimental native rollover
+# Fahare Horizon 0.3.2 — experimental native rollover
 
 Unofficial Rust adaptation of [Fahare](https://github.com/qixils/fahare/tree/dd4250a5ce3879e06070a6f72400e1a00909cc97), by Lexi Larkin (qixils), MIT.
 
 **Experimental: the engine integration has not been compiled or game-tested. Use a disposable dedicated server and independent backups.**
 
 ## Install
-Add https://github.com/gurumumu/Fahare-Horizon to Horizon's GitHub mod linker. Targets Horizon 26.3 source commit de8b4e2526df9d7f611515b78123a26a3914176f. Exact SDK availability and mixin compatibility must be checked in the launcher's build log.
+Add https://github.com/gurumumu/Fahare-Horizon to Horizon's GitHub mod linker. Targets Horizon 26.3 source commit f1bb66f353cf67f2aa4665293fc75c8d91186fc7. Exact SDK availability and mixin compatibility must be checked in the launcher's build log.
+
+## What changed in 0.3.2
+- Retargeted to Horizon's November 22, 2026 21:01 UTC build (`f1bb66f`), whose exact-build SDK was published on GitHub. Verified the two native function signatures, shutdown storage release, relevant world fields and the pinned mixins revision against that source. Native compilation and runtime behavior remain untested.
+- If the launcher still reports missing mod tools, check the selected game version and its tool download log. This update cannot repair the launcher's SDK distribution or download failures.
 
 ## What changed in 0.3.1
 - Fixed GitHub source package installation: moved the standalone Rust test harness from `tests/core.rs` to `src/core_tests.rs`, a path accepted by Horizon's native package validator. No runtime logic changed.
@@ -46,6 +50,6 @@ On Windows run core-tests.exe instead. This does not compile or test Horizon hoo
 No verified native engine build, no automated server relaunch, no live in-session reset, no integrated/LAN rollover, no automatic transfer of datapacks or world-local configurations to the new save, no restore command. No external downloads, telemetry or subprocesses in the mod code. The journal uses synchronous disk writes only on deaths, so slow storage may add a brief tick delay.
 
 ## Source references
-- [Horizon clean server shutdown](https://github.com/arismoko/horizon/blob/de8b4e2526df9d7f611515b78123a26a3914176f/crates/horizon-client/src/game/world/server_lifecycle/mod.rs)
-- [Normal stop path](https://github.com/arismoko/horizon/blob/de8b4e2526df9d7f611515b78123a26a3914176f/crates/horizon-client/src/game/interface/dedicated/transfer.rs)
-- [Native mixins](https://github.com/arismoko/horizon/blob/de8b4e2526df9d7f611515b78123a26a3914176f/docs/modding/src/concepts/native-route/2-mixins.md)
+- [Horizon clean server shutdown](https://github.com/horizon-rust/horizon/blob/f1bb66f353cf67f2aa4665293fc75c8d91186fc7/crates/horizon-client/src/game/world/server_lifecycle/mod.rs)
+- [Normal stop path](https://github.com/horizon-rust/horizon/blob/f1bb66f353cf67f2aa4665293fc75c8d91186fc7/crates/horizon-client/src/game/interface/dedicated/transfer.rs)
+- [Native mixins](https://github.com/horizon-rust/horizon/blob/f1bb66f353cf67f2aa4665293fc75c8d91186fc7/docs/modding/src/concepts/native-route/2-mixins.md)

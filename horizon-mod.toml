@@ -1,6 +1,6 @@
 id = "fahare"
 name = "Fahare Horizon"
-version = "0.3.1"
+version = "0.3.2"
 description = "Hardcore rounds with safe whole-world rollover for dedicated Horizon servers."
 authors = ["qixils", "Fahare-Horizon contributors"]
 license = "MIT"
@@ -10,7 +10,7 @@ capabilities = ["registries"]
 
 [native]
 game = "26.3"
-horizon = "de8b4e2526df9d7f611515b78123a26a3914176f"
+horizon = "f1bb66f353cf67f2aa4665293fc75c8d91186fc7"
 mixins = "e59da9094f0c2fdda6c627fe9eff22dec6a906f0"
 
 [[native.mixin]]
