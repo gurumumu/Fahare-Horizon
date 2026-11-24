@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 pub struct Rules {
     pub lives: u32,
     pub auto_reset: bool,
@@ -19,16 +19,22 @@ pub struct Round {
     pub ended: bool,
 }
 impl Round {
+    pub fn deaths(&self, id: u128) -> u32 {
+        self.deaths.get(&id).copied().unwrap_or(0)
+    }
     pub fn dead(&self, id: u128) -> bool {
-        self.deaths.get(&id).copied().unwrap_or(0) >= self.rules.lives
+        self.deaths(id) >= self.rules.lives
+    }
+    pub fn replay_death(&mut self, id: u128) {
+        let count = self.deaths.entry(id).or_default();
+        *count = count.saturating_add(1);
     }
     pub fn record_death(&mut self, player: u128, online: &[u128]) -> bool {
         if self.ended { return false; }
-        let count = self.deaths.entry(player).or_default();
-        *count = count.saturating_add(1);
+        self.replay_death(player);
         if !self.rules.auto_reset { return false; }
-        let finished = (self.rules.any_death || (!online.is_empty() &&
-            online.iter().all(|id| self.dead(*id)))) && self.dead(player);
+        let finished = self.dead(player) && (self.rules.any_death ||
+            (!online.is_empty() && online.iter().all(|id| self.dead(*id))));
         self.ended = finished;
         finished
     }
@@ -55,5 +61,16 @@ mod tests {
     #[test] fn disabled() {
         let mut r = Round {rules: Rules {auto_reset: false, any_death: true, ..Rules::default()}, ..Round::default()};
         assert!(!r.record_death(1, &[1]));
+        assert!(r.dead(1));
+    }
+    #[test] fn any_death_respects_lives() {
+        let mut r = Round {rules: Rules {lives: 2, any_death: true, ..Rules::default()}, ..Round::default()};
+        assert!(!r.record_death(1, &[1,2]));
+        assert!(r.record_death(1, &[1,2]));
+    }
+    #[test] fn restored_lives() {
+        let mut r = Round::default();
+        r.replay_death(1);
+        assert!(r.record_death(2, &[1,2]));
     }
 }
