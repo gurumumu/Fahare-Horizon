@@ -1,6 +1,6 @@
 id = "fahare"
 name = "Fahare Horizon"
-version = "0.3.0"
+version = "0.3.1"
 description = "Hardcore rounds with safe whole-world rollover for dedicated Horizon servers."
 authors = ["qixils", "Fahare-Horizon contributors"]
 license = "MIT"

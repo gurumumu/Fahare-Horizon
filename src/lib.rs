@@ -177,7 +177,7 @@ impl Hooks for Mod {
             }
             Some("status") => {
                 let message = match self.state.lock() {
-                    Ok(s) => format!("Fahare 0.3 | dedicated: {} | lives: {} | auto-reset: {} | any-death: {} | reset pending: {} | journal: {}",
+                    Ok(s) => format!("Fahare 0.3.1 | dedicated: {} | lives: {} | auto-reset: {} | any-death: {} | reset pending: {} | journal: {}",
                         s.dedicated, s.round.rules.lives, s.round.rules.auto_reset, s.round.rules.any_death,
                         ARMED.load(Ordering::Acquire), s.error.as_deref().unwrap_or(if s.journal.is_some() {"ready"} else {"inactive"})),
                     Err(_) => "Fahare state unavailable.".to_owned(),

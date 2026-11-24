@@ -1,4 +1,4 @@
-# Fahare Horizon 0.3.0 — experimental native rollover
+# Fahare Horizon 0.3.1 — experimental native rollover
 
 Unofficial Rust adaptation of [Fahare](https://github.com/qixils/fahare/tree/dd4250a5ce3879e06070a6f72400e1a00909cc97), by Lexi Larkin (qixils), MIT.
 
@@ -6,6 +6,9 @@ Unofficial Rust adaptation of [Fahare](https://github.com/qixils/fahare/tree/dd4
 
 ## Install
 Add https://github.com/gurumumu/Fahare-Horizon to Horizon's GitHub mod linker. Targets Horizon 26.3 source commit de8b4e2526df9d7f611515b78123a26a3914176f. Exact SDK availability and mixin compatibility must be checked in the launcher's build log.
+
+## What changed in 0.3.1
+- Fixed GitHub source package installation: moved the standalone Rust test harness from `tests/core.rs` to `src/core_tests.rs`, a path accepted by Horizon's native package validator. No runtime logic changed.
 
 ## What changed in 0.3
 - World-local, UUID-keyed append-only death journal, synced to disk on every death. The counter survives an ordinary restart; a new save starts a new journal.
@@ -34,7 +37,7 @@ Commands: /fahare status (everyone), /fahare reset (permission level 4). If a jo
 ## Testing
 Run the standalone core tests from the repository root with a Rust compiler supporting edition 2024:
 ```
-rustc --edition=2024 --test tests/core.rs -o core-tests
+rustc --edition=2024 --test src/core_tests.rs -o core-tests
 ./core-tests
 ```
 On Windows run core-tests.exe instead. This does not compile or test Horizon hooks/mixins. In a disposable dedicated server test: two players dying in succession, reconnecting as spectator, restarting between deaths, failure of a journal write, and successful regeneration after clean shutdown. Verify archive contents before restarting.
