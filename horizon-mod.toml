@@ -1,7 +1,7 @@
 id = "fahare"
-name = "Fahare Horizon (experimental)"
-version = "0.1.0"
-description = "Hardcore round tracking; no automatic world deletion in this preview."
+name = "Fahare Horizon"
+version = "0.2.0"
+description = "Hardcore rounds with safe whole-world rollover for dedicated Horizon servers."
 authors = ["qixils", "Fahare-Horizon contributors"]
 license = "MIT"
 api = "0.2"
@@ -10,5 +10,31 @@ capabilities = ["registries"]
 
 [native]
 game = "26.3"
-horizon = "9f42064c11efe7ef3e5ed2baad7ddc2a3b36eea0"
+horizon = "de8b4e2526df9d7f611515b78123a26a3914176f"
 mixins = "e59da9094f0c2fdda6c627fe9eff22dec6a906f0"
+
+[[native.mixin]]
+id = "request_clean_stop"
+target = "horizon_client::game::dedicated::transfer::Game<'_>::stop_now"
+kind = "HEAD"
+helper = "src/mixins/stop.rs"
+bindings = [{ name = "state", ty = "&super::ServerState", value = "state" }]
+
+[[native.mixin]]
+id = "capture_clean_shutdown"
+target = "horizon_client::game::server_lifecycle::Game<'_>::shutdown_started_server"
+kind = "HEAD"
+helper = "src/mixins/capture.rs"
+bindings = [
+ { name = "game", ty = "&mut Game<'_>", value = "&mut *self" },
+ { name = "dedicated", ty = "bool", value = "dedicated" },
+ { name = "crashed", ty = "bool", value = "crashed" },
+ { name = "run_error", ty = "Option<&str>", value = "run_error" }
+]
+
+[[native.mixin]]
+id = "archive_after_clean_shutdown"
+target = "horizon_client::game::server_lifecycle::Game<'_>::shutdown_started_server"
+kind = "RETURN"
+helper = "src/mixins/archive.rs"
+bindings = [{ name = "result", ty = "Result<()>", value = "$value" }]
